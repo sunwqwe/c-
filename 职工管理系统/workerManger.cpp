@@ -1,4 +1,8 @@
 #include "workerManager.h"
+#include <windows.h>
+
+using namespace std;
+
 
 WorkerManager::WorkerManager()
 {
@@ -29,8 +33,8 @@ void WorkerManager::show_Menu()
 void WorkerManager::ExitSystem()
 {
 	cout << "欢迎下次使用" << endl;
-	system("pause");
-	exit(0); //退出程序
+	//system("pause");
+	return; //退出程序
 }
 
 //添加职工
@@ -48,7 +52,7 @@ void WorkerManager::Add_Emp()
 		int newSize = this->m_EmpNum + addNum; //新空间人数 = 原来记录人数 + 新增人数
 
 		//开辟新空间
-		Worker** newSpace = new Worker * [newSize];
+		Worker** newSpace = new Worker * [this->m_EmpNum + addNum];
 
 		//将原来空间下数据，拷贝倒新空间下
 		if (this->m_EmpArray != NULL)
@@ -87,7 +91,7 @@ void WorkerManager::Add_Emp()
 			case 2:
 				worker = new Manager(id, name, 2);
 				break;
-			case3:
+			case 3:
 				worker = new Boss(id, name, 3);
 				break;
 			default:
@@ -102,13 +106,16 @@ void WorkerManager::Add_Emp()
 		delete[] this->m_EmpArray;
 
 		//更改新空间的指向
-		this->m_EmpNum = newSize;
+		this->m_EmpArray = newSpace;
 
 		//更新新的职工人数
 		this->m_EmpNum = newSize;
 
 		//提示添加成功
 		cout << "成功添加" << addNum << "名新职工!" << endl;
+
+		//保存数据到文件中
+		this->save();
 
 	}
 
@@ -122,7 +129,42 @@ void WorkerManager::Add_Emp()
 	system("cls");
 }
 
+//保存文件
+void WorkerManager::save()
+{
+	ofstream ofs;
+	ofs.open(FILENAME, ios::out | ios::app); //用输出的方式打开文件 --写文件
+
+	//将每个人数据写入到文件中
+	for (int i = 0; i < this->m_EmpNum; i++)
+	{
+		ofs << this->m_EmpArray[i]->m_Id << " "
+			<< this->m_EmpArray[i]->m_Name << " "
+			<< this->m_EmpArray[i]->m_DeptId << endl;
+	}
+
+	//关闭文件
+	ofs.close();
+	cout << "保存成功！" << endl;
+}
+
 WorkerManager::~WorkerManager()
 {
+	if (this->m_EmpArray != NULL)
+	{
 
+		//先删除每一个职工对象
+
+		for (int i = 0; i < this->m_EmpNum; i++)
+		{
+			if (this->m_EmpArray[i] != NULL)
+			{
+				delete this->m_EmpArray[i];
+				this->m_EmpArray[i] = NULL;
+			}
+		}
+		//再删除数组
+		delete[] this->m_EmpArray;
+		this->m_EmpArray = NULL;
+	}
 }
