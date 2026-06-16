@@ -13,7 +13,7 @@ WorkerManager::WorkerManager()
 
 	if (!ifs.is_open())
 	{
-		cout << "文件不存在" << endl;
+		//cout << "文件不存在" << endl;
 		//初始化属性
 		//初始化记录人数
 		this->m_EmpNum = 0;
@@ -260,6 +260,27 @@ void WorkerManager::init_Emp()
 	ifs.close();
 }
 
+
+//显示职工
+void WorkerManager::Show_Emp()
+{
+	//判断文件是否为空
+	if (this->m_FileIsEmpty)
+	{
+		cout << "文件不存在或记录为空！" << endl;
+	}
+	else
+	{
+		for (int i = 0; i < m_EmpNum; i++)
+		{
+			//利用多态调用程序接口
+			this->m_EmpArray[i]->showInfo();
+		}
+	}
+	//按任意键后清屏
+	system("pause");
+	system("cls");
+}
 
 WorkerManager::~WorkerManager()
 {
