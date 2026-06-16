@@ -6,6 +6,25 @@ using namespace std;
 
 WorkerManager::WorkerManager()
 {
+
+	//1、文件不存在
+	ifstream ifs;
+	ifs.open(FILENAME,ios::in); //读文件
+
+	if (!ifs.is_open())
+	{
+		cout << "文件不存在" << endl;
+		//初始化属性
+		//初始化记录人数
+		this->m_EmpNum = 0;
+		//初始化数值指针
+		this->m_EmpArray = NULL;
+		//初始化文件是否为空
+		this->m_FileIsEmpty = true;
+		ifs.close();
+		return;
+	}
+
 	//初始化属性
 	this->m_EmpNum = 0;
 
