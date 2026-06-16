@@ -43,6 +43,11 @@ WorkerManager::WorkerManager()
 		return;
 	}
 
+	//3、文件存在，并且记录数据
+	int num = this->get_EmpNum();
+	cout << "职工人数为: " << num << endl;
+	this->m_EmpNum = num;
+
 	//初始化属性
 	this->m_EmpNum = 0;
 
@@ -186,6 +191,25 @@ void WorkerManager::save()
 	//关闭文件
 	ofs.close();
 	cout << "保存成功！" << endl;
+}
+
+//统计文件中人数
+int WorkerManager::get_EmpNum()
+{
+	ifstream ifs;
+	ifs.open(FILENAME, ios::in); //打开文件 读
+
+	int id;
+	string name;
+	int dId;
+
+	int num = 0;
+	while (ifs >> id && ifs >> name && ifs >> dId)
+	{
+		//统计人数变量
+		num++;
+	}
+	return num;
 }
 
 WorkerManager::~WorkerManager()
