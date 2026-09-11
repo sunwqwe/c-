@@ -56,6 +56,7 @@ void test01()
 void test02()
 {
 	Person<string, int>p("Jerry", 20);
+
 	printPerson2(p);
 }
 
